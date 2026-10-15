@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bonnie or Goul – Ανώνυμο Δημοψήφισμα</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.3/confetti.browser.min.js"></script>
+<style>
+:root{
+  --bg:#07070d; --card:rgba(255,255,255,.05); --line:rgba(255,255,255,.12);
+  --text:#f4f4f8; --muted:#9a9ab0;
+  --rose:#f43f5e; --rose2:#fb7185; --sky:#0284c7; --sky2:#38bdf8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Outfit','Noto Sans',system-ui,sans-serif; color:var(--text); background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 60% 50% at 0% 100%,rgba(244,63,94,.22),transparent 70%),
+    radial-gradient(ellipse 60% 50% at 100% 100%,rgba(2,132,199,.25),transparent 70%);
+  background-attachment:fixed; padding:24px 16px 110px;
+}
+.wrap{max-width:1000px;margin:0 auto}
+header{text-align:center;margin-bottom:28px}
+.live{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:600;padding:6px 14px;border-radius:99px;
+  border:1px solid var(--line);background:var(--card);color:var(--muted);letter-spacing:.06em}
+.live .dot{color:#22c55e;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.25}}
+h1{font-weight:900;font-size:clamp(2.2rem,8vw,4.6rem);line-height:1.05;margin:18px 0 22px;letter-spacing:-.02em}
+h1 .b{color:var(--rose2);text-shadow:0 0 18px var(--rose),0 0 44px rgba(244,63,94,.6)}
+h1 .g{color:var(--sky2);text-shadow:0 0 18px var(--sky),0 0 44px rgba(2,132,199,.7)}
+h1 .or{font-weight:400;font-size:.45em;color:var(--muted);padding:0 .35em;text-shadow:none}
+.global{max-width:640px;margin:0 auto}
+.gbar{display:flex;height:16px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.08);border:1px solid var(--line)}
+.gbar i{display:block;height:100%;width:50%;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+#gB{background:linear-gradient(90deg,var(--rose),var(--rose2));box-shadow:0 0 16px var(--rose)}
+#gG{background:linear-gradient(90deg,var(--sky2),var(--sky));box-shadow:0 0 16px var(--sky)}
+.gmeta{display:flex;justify-content:space-between;margin-top:8px;font-weight:600;font-size:.95rem}
+.gmeta .l{color:var(--rose2)} .gmeta .r{color:var(--sky2)} .gmeta .m{color:var(--muted);font-weight:400}
+
+.duel{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:34px}
+.vs{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:68px;height:68px;border-radius:50%;
+  display:grid;place-items:center;font-weight:900;font-size:1.35rem;background:#0b0b14;border:2px solid var(--line);
+  box-shadow:0 0 0 6px var(--bg),-8px 0 24px rgba(244,63,94,.5),8px 0 24px rgba(2,132,199,.5)}
+.card{position:relative;padding:34px 26px 28px;border-radius:26px;background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);text-align:center;overflow:hidden;transition:box-shadow .4s,border-color .4s,transform .25s}
+.card.bonnie{--c:var(--rose);--c2:var(--rose2)}
+.card.goul{--c:var(--sky);--c2:var(--sky2)}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,color-mix(in srgb,var(--c) 28%,transparent),transparent 62%);pointer-events:none}
+.card.chosen{border-color:var(--c2);box-shadow:0 0 0 1px var(--c2),0 0 48px color-mix(in srgb,var(--c) 55%,transparent);transform:translateY(-4px)}
+.badge{position:relative;width:96px;height:96px;margin:0 auto 18px;border-radius:28px;display:grid;place-items:center;font-size:2.5rem;color:#fff;
+  background:linear-gradient(135deg,var(--c2),var(--c));box-shadow:0 0 34px color-mix(in srgb,var(--c) 70%,transparent),inset 0 1px 0 rgba(255,255,255,.4);transform:rotate(-6deg)}
+.photo{position:relative;display:block;width:150px;height:150px;margin:0 auto 18px;border-radius:50%;object-fit:cover;object-position:50% 25%;border:3px solid var(--c2);box-shadow:0 0 34px color-mix(in srgb,var(--c) 70%,transparent)}
+.card.goul .badge{transform:rotate(6deg)}
+.card h2{position:relative;font-size:2rem;font-weight:900;color:var(--c2);text-shadow:0 0 20px color-mix(in srgb,var(--c) 60%,transparent)}
+.card p{position:relative;color:var(--muted);font-family:'Noto Sans',sans-serif;font-size:.95rem;line-height:1.55;margin:10px auto 22px;max-width:30ch}
+.pct{position:relative;font-size:3.4rem;font-weight:900;line-height:1}
+.pct small{font-size:1.4rem;font-weight:600;color:var(--muted)}
+.bar{position:relative;height:10px;border-radius:99px;background:rgba(255,255,255,.09);margin:14px 0 8px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--c),var(--c2));box-shadow:0 0 14px var(--c);transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.count{position:relative;color:var(--muted);font-size:.95rem;margin-bottom:22px}
+.count b{color:var(--text);font-size:1.15rem}
+.vote{position:relative;width:100%;border:0;cursor:pointer;font:800 1.05rem 'Outfit','Noto Sans',sans-serif;color:#fff;padding:16px 18px;border-radius:16px;
+  background:linear-gradient(135deg,var(--c2),var(--c));box-shadow:0 8px 28px color-mix(in srgb,var(--c) 55%,transparent);transition:transform .15s,filter .2s}
+.vote:hover{filter:brightness(1.12)} .vote:active{transform:scale(.97)}
+.vote:focus-visible,.reset:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.card.chosen .vote{background:transparent;border:2px solid var(--c2);color:var(--c2);box-shadow:none}
+
+.status{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;
+  max-width:calc(100% - 24px);padding:10px 14px 10px 18px;border-radius:99px;background:rgba(14,14,24,.82);border:1px solid var(--line);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);font-size:.88rem;color:var(--muted)}
+.status strong{color:var(--text)} .status .mode{font-size:.75rem;opacity:.8}
+.reset{border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);font:600 .85rem 'Noto Sans',sans-serif;padding:7px 14px;border-radius:99px;cursor:pointer}
+.reset:hover{background:rgba(255,255,255,.16)} .reset[disabled]{opacity:.4;cursor:default}
+#toasts{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:50;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:max-content;max-width:calc(100% - 24px)}
+.toast{padding:12px 20px;border-radius:14px;font-weight:600;font-size:.95rem;background:rgba(14,14,24,.92);border:1px solid var(--tc,var(--line));box-shadow:0 0 28px color-mix(in srgb,var(--tc,#fff) 45%,transparent);
+  animation:tin .3s ease-out;transition:opacity .4s,transform .4s}
+.toast.out{opacity:0;transform:translateY(-10px)}
+@keyframes tin{from{opacity:0;transform:translateY(-12px)}}
+.note{text-align:center;margin-top:40px;font:400 .75rem 'Noto Sans',sans-serif;color:var(--muted);opacity:.8}
+@media(max-width:720px){
+  .duel{grid-template-columns:1fr;gap:56px}
+  .vs{top:calc(50% - 0px)}
+  .status{border-radius:22px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="toasts" aria-live="polite"></div>
+<div class="wrap">
+  <header>
+    <div class="live"><span class="dot">●</span> ΑΝΩΝΥΜΟ ΔΗΜΟΨΗΦΙΣΜΑ</div>
+    <h1><span class="b">BONNIE</span><span class="or">or</span><span class="g">GOUL</span></h1>
+    <div class="global">
+      <div class="gbar" role="img" aria-label="Συνολικό ποσοστό ψήφων"><i id="gB"></i><i id="gG"></i></div>
+      <div class="gmeta"><span class="l" id="gBp">50%</span><span class="m" id="gTotal">0 ψήφοι συνολικά</span><span class="r" id="gGp">50%</span></div>
+    </div>
+  </header>
+
+  <main class="duel">
+    <div class="vs">VS</div>
+
+    <section class="card bonnie" id="cardBonnie">
+      <img class="photo" src="bonnie.png" alt="Μπόνι">
+      <h2>ΜΠΟΝΙ</h2>
+      <p>Μπόνι</p>
+      <div class="pct"><span id="pB">0</span><small>%</small></div>
+      <div class="bar"><i id="barB"></i></div>
+      <div class="count"><b id="cB">0</b> ψήφοι</div>
+      <button class="vote" id="btnB" type="button">ΨΗΦΙΣΕ ΜΠΟΝΙ</button>
+    </section>
+
+    <section class="card goul" id="cardGoul">
+      <div class="badge"><i class="fa-solid fa-dragon"></i></div>
+      <h2>ΓΟΥΛ</h2>
+      <p>Γουλ</p>
+      <div class="pct"><span id="pG">0</span><small>%</small></div>
+      <div class="bar"><i id="barG"></i></div>
+      <div class="count"><b id="cG">0</b> ψήφοι</div>
+      <button class="vote" id="btnG" type="button">ΨΗΦΙΣΕ ΓΟΥΛ</button>
+    </section>
+  </main>
+  <footer class="note">Το δημοψήφισμα δεν έχει σκοπό να πειράξει κανέναν και είναι 100% ανώνυμο.</footer>
+</div>
+
+<div class="status">
+  <span id="statusText">Δεν έχεις ψηφίσει ακόμα</span>
+  <span class="mode" id="modeText">⚪ Τοπική λειτουργία</span>
+</div>
+
+<script type="module">
+/* Η κοινή βάση είναι το Netlify (function /api/votes). Δεν χρειάζεται καμία ρύθμιση εδώ. */
+let FB_ON = false;   // γίνεται true μόλις συνδεθεί με τον server
+
+const NAMES = { bonnie: "ΜΠΟΝΙ", goul: "ΓΟΥΛ" };
+const COLORS = { bonnie: ["#f43f5e", "#fb7185"], goul: ["#0284c7", "#38bdf8"] };
+const $ = id => document.getElementById(id);
+
+const safeGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
+const safeSet = (k, v) => { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} };
+
+let counts = { bonnie: 0, goul: 0 };
+let myVote = ["bonnie", "goul"].includes(safeGet("bg_vote")) ? safeGet("bg_vote") : null;
+if (!FB_ON) { try { const s = JSON.parse(safeGet("bg_counts")); if (s) counts = clean(s); } catch {} }
+
+function clean(c) { return { bonnie: Math.max(0, +c.bonnie || 0), goul: Math.max(0, +c.goul || 0) }; }
+const fmt = n => n.toLocaleString("el-GR");
+
+/* ---------- Render ---------- */
+function render() {
+  const { bonnie: b, goul: g } = counts, t = b + g;
+  const pb = t ? Math.round(b / t * 100) : 0, pg = t ? 100 - pb : 0;
+  const gb = t ? b / t * 100 : 50;
+  $("gB").style.width = gb + "%"; $("gG").style.width = (100 - gb) + "%";
+  $("gBp").textContent = (t ? pb : 50) + "%"; $("gGp").textContent = (t ? pg : 50) + "%";
+  $("gTotal").textContent = `${fmt(t)} ${t === 1 ? "ψήφος" : "ψήφοι"} συνολικά`;
+  $("pB").textContent = pb; $("pG").textContent = pg;
+  $("barB").style.width = pb + "%"; $("barG").style.width = pg + "%";
+  $("cB").textContent = fmt(b); $("cG").textContent = fmt(g);
+  $("cardBonnie").classList.toggle("chosen", myVote === "bonnie");
+  $("cardGoul").classList.toggle("chosen", myVote === "goul");
+  $("btnB").textContent = myVote === "bonnie" ? "✓ ΨΗΦΙΣΕΣ ΜΠΟΝΙ" : "ΨΗΦΙΣΕ ΜΠΟΝΙ";
+  $("btnG").textContent = myVote === "goul" ? "✓ ΨΗΦΙΣΕΣ ΓΟΥΛ" : "ΨΗΦΙΣΕ ΓΟΥΛ";
+  $("statusText").innerHTML = myVote ? `Η ψήφος σου: <strong>${NAMES[myVote]}</strong>` : "Δεν έχεις ψηφίσει ακόμα";
+  $("btnB").disabled = $("btnG").disabled = !!myVote || blocked;
+}
+
+/* ---------- Toast & Confetti ---------- */
+function toast(msg, color) {
+  const el = document.createElement("div");
+  el.className = "toast"; el.textContent = msg;
+  if (color) el.style.setProperty("--tc", color);
+  $("toasts").appendChild(el);
+  setTimeout(() => el.classList.add("out"), 2600);
+  setTimeout(() => el.remove(), 3100);
+}
+function boom(who) {
+  if (typeof confetti !== "function") return;
+  try {
+    const colors = [...COLORS[who], "#ffffff"];
+    confetti({ particleCount: 110, spread: 75, startVelocity: 42, origin: { y: .7 }, colors });
+    confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0, y: .8 }, colors });
+    confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1, y: .8 }, colors });
+  } catch {}
+}
+
+/* ---------- Cross-tab sync ---------- */
+let bc = null;
+try { bc = new BroadcastChannel("bonnie-or-goul"); } catch {}
+function broadcast() {
+  const msg = { counts, myVote, t: Date.now() };
+  try { bc && bc.postMessage(msg); } catch {}
+}
+function adopt(msg) {
+  if (msg.counts) counts = clean(msg.counts);
+  if ("myVote" in msg) myVote = ["bonnie", "goul"].includes(msg.myVote) ? msg.myVote : null;
+  render();
+}
+if (bc) bc.onmessage = e => adopt(e.data || {});
+window.addEventListener("storage", e => {
+  if (e.key === "bg_vote") { myVote = ["bonnie", "goul"].includes(e.newValue) ? e.newValue : null; render(); }
+  if (e.key === "bg_counts" && !FB_ON && e.newValue) { try { counts = clean(JSON.parse(e.newValue)); render(); } catch {} }
+});
+
+/* ---------- Netlify function (async, non-blocking) ---------- */
+const API = "/api/votes";
+/* ---------- Ταυτότητα συσκευής ---------- */
+const sha = async str => [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str)))].map(x => x.toString(16).padStart(2, "0")).join("");
+function getDevId() {
+  let id = safeGet("bg_dev");
+  if (!id) { const m = document.cookie.match(/(?:^|; )bg_dev=([^;]*)/); id = m ? m[1] : null; }
+  if (!id) id = crypto.randomUUID();
+  safeSet("bg_dev", id);
+  try { document.cookie = `bg_dev=${id}; path=/; max-age=63072000; SameSite=Lax; Secure`; } catch {}
+  return id;
+}
+async function makeFp() {
+  const parts = [navigator.userAgent, navigator.platform, navigator.language, navigator.hardwareConcurrency, navigator.deviceMemory,
+    navigator.maxTouchPoints, screen.width, screen.height, screen.colorDepth, devicePixelRatio, Intl.DateTimeFormat().resolvedOptions().timeZone];
+  try {
+    const cv = document.createElement("canvas"); cv.width = 220; cv.height = 40;
+    const x = cv.getContext("2d"); x.textBaseline = "top"; x.font = "16px Arial"; x.fillStyle = "#f60"; x.fillRect(10, 5, 100, 25);
+    x.fillStyle = "#069"; x.fillText("Bonnie or Goul ΜΠΟΝΙ 🎲", 4, 8); parts.push(cv.toDataURL());
+  } catch {}
+  try {
+    const gl = document.createElement("canvas").getContext("webgl"); const e = gl.getExtension("WEBGL_debug_renderer_info");
+    parts.push(gl.getParameter(e.UNMASKED_VENDOR_WEBGL), gl.getParameter(e.UNMASKED_RENDERER_WEBGL));
+  } catch {}
+  return (await sha(parts.join("|"))).slice(0, 64);
+}
+const ready = (async () => ({ "x-device-id": getDevId(), "x-fp": await makeFp() }))();
+let pending = 0;
+let blocked = false;
+async function refetch() {
+  if (pending > 0 || document.hidden) return;
+  try {
+    const r = await fetch(API, { cache: "no-store", headers: await ready });
+    if (r.status === 403) { blocked = true; showBlocked(); return; }
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    counts = clean(d);
+    myVote = ["bonnie", "goul"].includes(d.mine) ? d.mine : null;
+    safeSet("bg_vote", myVote);
+    if (!FB_ON) { FB_ON = true; setMode(true); }
+    render();
+  } catch (err) { if (FB_ON) { FB_ON = false; setMode(false); } }
+}
+function initRemote() {
+  refetch();
+  setInterval(refetch, 3000);
+  document.addEventListener("visibilitychange", refetch);
+}
+function setMode(live) {
+  $("modeText").textContent = live ? "🟢 Ζωντανός συγχρονισμός" : "⚪ Τοπική λειτουργία";
+}
+function showBlocked() {
+  document.querySelector(".wrap").innerHTML = '<h1 style="margin-top:20vh">Η πρόσβαση επιτρέπεται μόνο από την Ελλάδα</h1>';
+  document.querySelector(".status").remove();
+}
+async function pushRemote(prev, next) {
+  pending++;
+  try {
+    const r = await fetch(API, { method: "POST", headers: { "content-type": "application/json", ...(await ready) }, body: JSON.stringify({ prev, next }) });
+    if (r.status === 403) { blocked = true; showBlocked(); return; }
+    const d = await r.json();
+    counts = clean(d);
+    myVote = ["bonnie", "goul"].includes(d.mine) ? d.mine : null;
+    safeSet("bg_vote", myVote);
+    if (r.status === 409) toast("Έχεις ήδη ψηφίσει από αυτή τη σύνδεση.", "#9a9ab0");
+    else if (!r.ok) throw new Error(r.status);
+    render(); broadcast();
+  } catch (err) { console.warn("Αποτυχία αποστολής ψήφου:", err); }
+  finally { pending--; }
+}
+
+/* ---------- Voting ---------- */
+function applyVote(next) {
+  const prev = myVote;
+  if (prev || !next || !FB_ON) { if (!FB_ON) toast("Δεν υπάρχει σύνδεση με τον server.", "#9a9ab0"); return; }
+  const c = { ...counts };
+  if (prev) c[prev] = Math.max(0, c[prev] - 1);
+  if (next) c[next] += 1;
+  counts = c; myVote = next;
+  safeSet("bg_vote", next);
+  if (!FB_ON) safeSet("bg_counts", JSON.stringify(counts));
+  render();                    // optimistic UI
+  broadcast();
+  setTimeout(() => pushRemote(prev, next), 0);   // non-blocking backend call
+  boom(next);
+  toast(`Η ψήφος σου για ${NAMES[next]} καταχωρήθηκε!`, COLORS[next][1]);
+}
+
+$("btnB").addEventListener("click", () => myVote === "bonnie" ? toast("Έχεις ήδη ψηφίσει ΜΠΟΝΙ", COLORS.bonnie[1]) : applyVote("bonnie"));
+$("btnG").addEventListener("click", () => myVote === "goul" ? toast("Έχεις ήδη ψηφίσει ΓΟΥΛ", COLORS.goul[1]) : applyVote("goul"));
+
+render();
+initRemote();
+</script>
+</body>
+</html>
